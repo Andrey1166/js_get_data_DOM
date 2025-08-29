@@ -7,15 +7,22 @@ let total = 0;
 let validCount = 0;
 
 for (const item of populationList) {
-  let num = item.textContent.replaceAll(',', '');
-  if (Number(num)) {
+  const num = item.textContent.replaceAll(',', '').trim();
+
+  if (Number.isFinite(Number(num))) {
     total += +num;
     validCount++;
   }
 }
 
-totalPopulation.textContent = total.toLocaleString('en-US') || 0;
+const separator = populationList[0].textContent
+  .split('')
+  .filter((item) => !Number(item))[0];
 
-averagePopulation.textContent = Math.round(
-  total / validCount,
-).toLocaleString('en-US') || 0;
+totalPopulation.textContent =
+  total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator) || 0;
+
+averagePopulation.textContent =
+  Math.round(total / validCount)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, separator) || 0;
